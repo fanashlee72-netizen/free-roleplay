@@ -43,7 +43,9 @@ REQUIRE_TRACKING = os.environ.get("REQUIRE_TRACKING", "").strip().lower() in {
 }
 RATE_LIMIT = max(1, int(os.environ.get("RATE_LIMIT", "30")))
 RATE_WINDOW_SECONDS = max(10, int(os.environ.get("RATE_WINDOW_SECONDS", "600")))
-USAGE_FILE = BASE_DIR / "usage.jsonl"
+USAGE_FILE = Path(
+    os.environ.get("USAGE_FILE", str(BASE_DIR / "usage.jsonl"))
+).expanduser()
 
 MIME_TYPES = {
     ".html": "text/html; charset=utf-8",
@@ -217,6 +219,7 @@ def log_usage(tracking_id: str, payload: dict, chars: int, status: str = "ok") -
     print(f"USAGE {line}", flush=True)
     try:
         with _usage_lock:
+            USAGE_FILE.parent.mkdir(parents=True, exist_ok=True)
             with USAGE_FILE.open("a", encoding="utf-8") as handle:
                 handle.write(line + "\n")
     except OSError:
