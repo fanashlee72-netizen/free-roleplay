@@ -1,0 +1,6 @@
+# 每行一个 Tracking ID，可以写成 id,名字
+# 复制本文件为 tracking_ids.txt 后修改。
+# 托管部署时更推荐用环境变量 TRACKING_IDS，格式：id1,id2,id3
+
+friend-001,小林
+friend-002,阿透
