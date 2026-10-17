@@ -1,5 +1,7 @@
 .env
+.env.server
 usage.jsonl
+data/
 server.log
 __pycache__/
 *.pyc
