@@ -99,4 +99,6 @@ DEEPSEEK_MODEL=deepseek-chat
 
 部署步骤、环境变量和用量查询见 [DEPLOY.md](DEPLOY.md)。
 
+国内云（阿里云、腾讯云、华为云轻量服务器，或 CloudBase Run / 函数计算）见 [DOMESTIC_DEPLOY.md](DOMESTIC_DEPLOY.md)。
+
 如果只是在同一局域网内测试，可以直接运行 `python app.py`，然后用 `http://本机IP:8010` 访问；但不要把带有 Key 的服务长期暴露在公网。
