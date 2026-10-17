@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: free-roleplay
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: TRACKING_IDS
+        sync: false
+      - key: ADMIN_TOKEN
+        sync: false
+      - key: REQUIRE_TRACKING
+        value: "1"
+      - key: RATE_LIMIT
+        value: "30"
+      - key: RATE_WINDOW_SECONDS
+        value: "600"
