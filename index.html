@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Free! 山崎宗介与松冈凛的非官方同人对话剧场。" />
+  <title>FREE! 同人剧场 · 宗介 × 凛</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="speed-lines" aria-hidden="true"></div>
+  <div class="water-band" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <header class="topbar">
+    <div class="logo-block">
+      <div class="logo">
+        <span class="logo-free">FREE!</span>
+        <span class="logo-slash">/</span>
+        <span class="logo-cn">同人剧场</span>
+      </div>
+      <p class="logo-sub">YAMAZAKI SOUSUKE × MATSUOKA RIN</p>
+    </div>
+    <div class="top-actions">
+      <span
+        class="status"
+        id="status"
+        role="button"
+        tabindex="0"
+        title="点击重新检测连接"
+      ><i></i><b id="statusText">连接中</b></span>
+      <button class="ghost-button" id="trackingBtn" type="button">Tracking ID</button>
+      <button class="ghost-button" id="clearBtn" type="button">清空对话</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="side-panel">
+      <section class="panel cast-panel">
+        <div class="panel-head">
+          <h2>CAST</h2>
+          <span>角色</span>
+        </div>
+        <p class="panel-hint">选一个你来扮演，AI 会扮演另一个人。</p>
+
+        <div class="cast-list" id="castList">
+          <button class="cast-card rin" type="button" data-role="rin">
+            <span class="avatar" aria-hidden="true">凛</span>
+            <span class="cast-info">
+              <strong>松冈 凛</strong>
+              <small>MATSUOKA RIN</small>
+            </span>
+            <span class="cast-tag">你扮演</span>
+          </button>
+
+          <button class="cast-card sousuke" type="button" data-role="sousuke">
+            <span class="avatar" aria-hidden="true">宗</span>
+            <span class="cast-info">
+              <strong>山崎 宗介</strong>
+              <small>YAMAZAKI SOUSUKE</small>
+            </span>
+            <span class="cast-tag">你扮演</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>SCENE</h2>
+          <span>场景</span>
+        </div>
+        <div class="scene-grid" id="sceneGrid">
+          <button class="scene-card active" type="button" data-scene="dorm">
+            <span class="scene-icon">🌙</span>
+            <strong>宿舍夜谈</strong>
+            <small>MIDNIGHT</small>
+          </button>
+          <button class="scene-card" type="button" data-scene="pool">
+            <span class="scene-icon">🏊</span>
+            <strong>泳池边</strong>
+            <small>POOL SIDE</small>
+          </button>
+          <button class="scene-card" type="button" data-scene="morning">
+            <span class="scene-icon">☀</span>
+            <strong>早晨赖床</strong>
+            <small>MORNING</small>
+          </button>
+          <button class="scene-card" type="button" data-scene="after_race">
+            <span class="scene-icon">🏁</span>
+            <strong>比赛后</strong>
+            <small>AFTER RACE</small>
+          </button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>TONE</h2>
+          <span>语气</span>
+        </div>
+        <div class="tone-row">
+          <span>斗嘴</span>
+          <input id="intensity" type="range" min="0" max="100" value="32" aria-label="语气强度" />
+          <span>温柔</span>
+        </div>
+        <p class="tone-label" id="toneLabel">嘴上不饶人</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>SYNC</h2>
+          <span>关系</span>
+        </div>
+        <div class="meter">
+          <span class="meter-name">默契值</span>
+          <div class="bar"><i id="rapportBar"></i></div>
+          <b id="rapportValue">42</b>
+        </div>
+        <div class="meter awkward">
+          <span class="meter-name">别扭值</span>
+          <div class="bar"><i id="awkwardBar"></i></div>
+          <b id="awkwardValue">58</b>
+        </div>
+        <p class="panel-hint sync-hint" id="syncHint">嘴上互相拆台，眼神却早就对上了。</p>
+      </section>
+    </aside>
+
+    <section class="chat-shell">
+      <div class="demo-banner" id="trackingBanner" hidden>
+        <span>需要管理员分配的 Tracking ID 才能开始对话。</span>
+        <button type="button" id="trackingSetup">输入 ID</button>
+      </div>
+
+      <div class="chat-head">
+        <div class="chat-title">
+          <span class="chat-kana" id="sceneKana">MIDNIGHT DORM</span>
+          <h1 id="sceneName">宿舍夜谈</h1>
+          <p id="sceneDesc">熄灯后的鲛柄学园 302 宿舍，窗外有虫鸣。</p>
+        </div>
+        <button class="memory-button" id="memoryBtn" type="button">
+          <span>✦</span> 回忆触发
+        </button>
+      </div>
+
+      <div class="chat-log" id="chatLog" aria-live="polite"></div>
+
+      <form class="composer" id="composer">
+        <textarea
+          id="messageInput"
+          rows="1"
+          maxlength="1200"
+          placeholder="以凛的身份说点什么……"
+          aria-label="输入消息"
+        ></textarea>
+        <button class="send-button" id="sendBtn" type="submit">
+          <span>发送</span>
+          <small>SEND</small>
+        </button>
+      </form>
+
+      <p class="disclaimer">
+        非官方同人作品，仅供个人学习与交流；角色版权归原作方所有。对话内容为 AI 生成。
+      </p>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="trackingModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="trackingTitle">
+      <button class="modal-close" id="trackingClose" type="button" aria-label="关闭">×</button>
+      <p class="modal-kana">ACCESS CHECK</p>
+      <h2 id="trackingTitle">输入 Tracking ID</h2>
+      <p class="modal-desc">
+        Tracking ID 由管理员分配，用来识别使用者并统计用量。它<b>不是 API Key</b>，
+        也不会暴露服务器上的密钥。
+      </p>
+      <label class="key-label" for="trackingInput">Tracking ID</label>
+      <input
+        class="key-input"
+        id="trackingInput"
+        type="text"
+        placeholder="例如：friend-001"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <p class="modal-hint">
+        还没有 ID？请联系站点管理员获取。每个 ID 都有独立的请求频率限制。
+      </p>
+      <div class="modal-actions">
+        <button class="save-key" id="trackingSave" type="button">验证并进入</button>
+        <button class="cancel-key" id="trackingCancel" type="button">稍后再说</button>
+      </div>
+      <p class="modal-status" id="trackingStatus" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
