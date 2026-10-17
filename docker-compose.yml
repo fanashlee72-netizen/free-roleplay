@@ -1,0 +1,15 @@
+services:
+  free-roleplay:
+    build: .
+    container_name: free-roleplay
+    restart: unless-stopped
+    ports:
+      - "8010:8010"
+    env_file:
+      - .env.server
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8010
+      USAGE_FILE: /data/usage.jsonl
+    volumes:
+      - ./data:/data
