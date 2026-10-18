@@ -2,6 +2,8 @@
 
 推荐使用 **轻量应用服务器**，比 ECS 简单，控制台自带防火墙和远程连接。
 
+> 如果系统是 **Alibaba Cloud Linux 4**，请优先看 [ALIYUN_LINUX_DEPLOY.md](ALIYUN_LINUX_DEPLOY.md)，不需要 Docker。
+
 ## 1. 购买
 
 阿里云控制台 → 轻量应用服务器 → 创建服务器：
@@ -84,11 +86,14 @@ nano .env.server
 填写：
 
 ```env
-DEEPSEEK_API_KEY=sk-你的key
-TRACKING_IDS=friend-001,friend-002
-ADMIN_TOKEN=换成一个随机长字符串
+DEEPSEEK_API_KEY=sk-REPLACE_WITH_YOUR_KEY
+TRACKING_IDS=friend-001,friend-002,friend-003
+USERS_DB=data/users.db
+ADMIN_TOKEN=REPLACE_WITH_A_RANDOM_STRING
 REQUIRE_TRACKING=1
 ```
+
+注意：`DEEPSEEK_API_KEY` 必须是纯英文/数字的 `sk-...`，不要保留中文占位符。
 
 保存：`Ctrl+O`，回车，`Ctrl+X`。
 
