@@ -12,6 +12,8 @@
 
 没有第三方依赖，Python 3.10+ 即可。
 
+本地 Tracking ID 配置、自检脚本和常见问题见 [LOCAL_TEST.md](LOCAL_TEST.md)。
+
 ### 一键启动（推荐给日常使用）
 
 双击 `start.pyw`，它会：
@@ -75,6 +77,38 @@ DEEPSEEK_MODEL=deepseek-chat
 | P1 | 语气强度滑杆 | 0–100，影响系统提示词与 temperature |
 | P2 | 默契值 / 别扭值 | 根据回复中的关键词自动增减，实时显示 |
 | P2 | 回忆触发 | 随机插入同人改写的回忆片段，让 AI 即兴回应 |
+
+## 语音菜单
+
+- 页面右上角“语音” → **自动朗读 / 朗读上一条 / 停止朗读**（浏览器 TTS）。
+- **播放本地语音**读取 `audio/` 下你自行提供的授权音频。
+- **本地语音彩蛋**在高情绪强度时自动播放本地音频。
+
+本项目不附带动画原声。请勿下载并再分发受版权保护的配音；如果你有合法授权的音频，按 [audio/README.md](audio/README.md) 的文件名放入即可。
+
+## 用户数据库
+
+用户表使用 SQLite，`tracking_id` 是主键，默认路径 `data/users.db`。首次启动会自动建表并预置：
+
+```text
+friend-001 / friend-002 / friend-003
+```
+
+查看用户：
+
+```bash
+curl "http://127.0.0.1:8010/api/admin/users?token=你的ADMIN_TOKEN"
+```
+
+新增或停用用户：
+
+```bash
+curl -X POST "http://127.0.0.1:8010/api/admin/users?token=你的ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"tracking_id":"friend-004","display_name":"朋友四号","active":true}'
+```
+
+`active` 设为 `false` 即可停用；记录和用量会保留。
 
 ## 文件说明
 
