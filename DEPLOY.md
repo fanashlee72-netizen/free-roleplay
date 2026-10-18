@@ -12,12 +12,37 @@
 | 变量 | 必填 | 说明 |
 | --- | --- | --- |
 | `DEEPSEEK_API_KEY` | 是 | 服务器调用 DeepSeek 的 Key，绝不能提交到 Git |
-| `TRACKING_IDS` | 是 | 允许的 ID，逗号分隔，例如 `friend-001,friend-002` |
+| `USERS_DB` | 建议 | SQLite 用户数据库路径，默认 `data/users.db` |
+| `TRACKING_IDS` | 否 | 数据库不可用时的回退 ID；首次启动会预置 `friend-001/002/003` |
 | `ADMIN_TOKEN` | 建议 | 查询用量接口的令牌 |
 | `REQUIRE_TRACKING` | 否 | 设为 `1` 强制开启 Tracking ID 校验 |
 | `RATE_LIMIT` | 否 | 每个 ID 在时间窗口内的最大请求数，默认 30 |
 | `RATE_WINDOW_SECONDS` | 否 | 时间窗口秒数，默认 600 |
 | `PORT` | 平台自动 | 监听端口；Render/Railway 会自动注入 |
+
+## 用户数据库
+
+用户表以 `tracking_id` 为主键，首次启动自动创建并预置：
+
+```text
+friend-001 / friend-002 / friend-003
+```
+
+查看用户：
+
+```bash
+curl "https://你的域名/api/admin/users?token=你的ADMIN_TOKEN"
+```
+
+新增或停用用户：
+
+```bash
+curl -X POST "https://你的域名/api/admin/users?token=你的ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"tracking_id":"friend-004","display_name":"朋友四号","active":true}'
+```
+
+把 `active` 设为 `false` 即可停用，不需要删除记录。
 
 ## 方案一：Render（最快）
 
