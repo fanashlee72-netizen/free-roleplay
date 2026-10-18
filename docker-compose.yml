@@ -11,5 +11,6 @@ services:
       HOST: 0.0.0.0
       PORT: 8010
       USAGE_FILE: /data/usage.jsonl
+      USERS_DB: /data/users.db
     volumes:
       - ./data:/data
