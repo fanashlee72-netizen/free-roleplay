@@ -50,9 +50,10 @@ nano .env.server
 至少填写：
 
 ```env
-DEEPSEEK_API_KEY=sk-你的key
-TRACKING_IDS=friend-001,friend-002
-ADMIN_TOKEN=换成一个随机长字符串
+DEEPSEEK_API_KEY=sk-REPLACE_WITH_YOUR_KEY
+TRACKING_IDS=friend-001,friend-002,friend-003
+USERS_DB=data/users.db
+ADMIN_TOKEN=REPLACE_WITH_A_RANDOM_STRING
 REQUIRE_TRACKING=1
 ```
 
