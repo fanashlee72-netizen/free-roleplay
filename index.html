@@ -5,13 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Free! 山崎宗介与松冈凛的非官方同人对话剧场。" />
   <title>FREE! 同人剧场 · 宗介 × 凛</title>
-  <link rel="stylesheet" href="style.css" />
+  <script>
+    document.write(
+      '<link rel="stylesheet" href="/style-' + Date.now() + '.css">'
+    );
+  </script>
 </head>
 <body>
   <div class="speed-lines" aria-hidden="true"></div>
   <div class="water-band" aria-hidden="true">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
+  <div class="ripples" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="pool-floor" aria-hidden="true"></div>
+  <div class="pool-tiles" aria-hidden="true"></div>
 
   <header class="topbar">
     <div class="logo-block">
@@ -67,31 +76,31 @@
 
       <section class="panel">
         <div class="panel-head">
+          <h2>ERA</h2>
+          <span>时期</span>
+        </div>
+        <div class="era-grid" id="eraGrid">
+          <button class="era-card" type="button" data-era="elementary">
+            <strong>小学</strong>
+            <small>CHILDHOOD</small>
+          </button>
+          <button class="era-card active" type="button" data-era="high_school">
+            <strong>高中</strong>
+            <small>HIGH SCHOOL</small>
+          </button>
+          <button class="era-card" type="button" data-era="university">
+            <strong>大学</strong>
+            <small>UNIVERSITY</small>
+          </button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
           <h2>SCENE</h2>
           <span>场景</span>
         </div>
-        <div class="scene-grid" id="sceneGrid">
-          <button class="scene-card active" type="button" data-scene="dorm">
-            <span class="scene-icon">🌙</span>
-            <strong>宿舍夜谈</strong>
-            <small>MIDNIGHT</small>
-          </button>
-          <button class="scene-card" type="button" data-scene="pool">
-            <span class="scene-icon">🏊</span>
-            <strong>泳池边</strong>
-            <small>POOL SIDE</small>
-          </button>
-          <button class="scene-card" type="button" data-scene="morning">
-            <span class="scene-icon">☀</span>
-            <strong>早晨赖床</strong>
-            <small>MORNING</small>
-          </button>
-          <button class="scene-card" type="button" data-scene="after_race">
-            <span class="scene-icon">🏁</span>
-            <strong>比赛后</strong>
-            <small>AFTER RACE</small>
-          </button>
-        </div>
+        <div class="scene-grid" id="sceneGrid"></div>
       </section>
 
       <section class="panel">
@@ -138,9 +147,46 @@
           <h1 id="sceneName">宿舍夜谈</h1>
           <p id="sceneDesc">熄灯后的鲛柄学园 302 宿舍，窗外有虫鸣。</p>
         </div>
-        <button class="memory-button" id="memoryBtn" type="button">
-          <span>✦</span> 回忆触发
-        </button>
+        <div class="chat-actions">
+          <div class="memory-actions">
+            <button class="memory-button" id="memoryBtn" type="button">
+              <span>✦</span> 回忆触发
+            </button>
+            <button class="memory-end" id="memoryEndBtn" type="button" hidden>
+              结束回忆
+            </button>
+          </div>
+
+          <div class="voice-menu">
+            <button
+              class="voice-button"
+              id="voiceBtn"
+              type="button"
+              aria-expanded="false"
+              aria-controls="voicePanel"
+            >
+              <span aria-hidden="true">🔊</span> 语音
+            </button>
+            <div class="voice-panel" id="voicePanel" hidden>
+              <button type="button" data-voice="tts">自动朗读</button>
+              <button type="button" data-voice="speak-last">朗读上一条</button>
+              <button type="button" data-voice="stop">停止朗读</button>
+              <button type="button" data-voice="play-local">播放本地语音</button>
+              <div class="voice-lang">
+                <span>台词</span>
+                <button type="button" data-lang="zh" class="active">中文</button>
+                <button type="button" data-lang="ja">日本語</button>
+              </div>
+              <label class="voice-toggle">
+                <input type="checkbox" id="eggToggle" checked />
+                本地语音彩蛋
+              </label>
+              <p class="voice-note" id="voiceNote">
+                朗读使用浏览器 TTS；原声片段需自行放入 <code>audio/</code>。
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="chat-log" id="chatLog" aria-live="polite"></div>
@@ -194,6 +240,44 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <div class="modal-backdrop" id="sceneModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="sceneTitle">
+      <button class="modal-close" id="sceneClose" type="button" aria-label="关闭">×</button>
+      <p class="modal-kana">CUSTOM SCENE</p>
+      <h2 id="sceneTitle">自定义场景</h2>
+      <p class="modal-desc">
+        写一个你们此刻所在的场景，AI 会据此调整氛围和对话。保存后会出现在场景列表里。
+      </p>
+      <label class="key-label" for="sceneNameInput">场景名称</label>
+      <input
+        class="key-input"
+        id="sceneNameInput"
+        type="text"
+        maxlength="20"
+        placeholder="例如：雨天的便利店门口"
+      />
+      <label class="key-label second-label" for="sceneDescInput">场景描述</label>
+      <textarea
+        class="key-input scene-textarea"
+        id="sceneDescInput"
+        rows="3"
+        maxlength="300"
+        placeholder="例如：雨下得很大，两个人挤在便利店屋檐下，手里各拿着一罐热咖啡。"
+      ></textarea>
+      <div class="modal-actions">
+        <button class="save-key" id="sceneSave" type="button">保存并使用</button>
+        <button class="cancel-key" id="sceneCancel" type="button">取消</button>
+      </div>
+      <p class="modal-status" id="sceneStatus" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.src = "/app-" + Date.now() + ".js";
+      document.body.appendChild(script);
+    })();
+  </script>
 </body>
 </html>
